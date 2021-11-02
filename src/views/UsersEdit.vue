@@ -1,6 +1,9 @@
 <template>
   <div class="usersedit">
-    <p>{{ user }}</p>
+    <div>
+      <img :src="`${user.image}`" class="user-image-show" alt="user image" />
+    </div>
+    <p>{{ user.name }}</p>
     <form v-on:submit.prevent="submit()">
       <h1>Edit User</h1>
       <ul>
@@ -24,7 +27,12 @@
   </div>
 </template>
 
-<style></style>
+<style>
+.user-image-show {
+  height: 200px;
+  border-radius: 50%;
+}
+</style>
 
 <script>
 import axios from "axios";
@@ -61,7 +69,14 @@ export default {
         });
     },
     deleteUser: function () {
-      console.log("haha delete user");
+      if (confirm("Are you sure you want to delete your account?")) {
+        axios.delete(`/users/current`).then((response) => {
+          console.log(response.data);
+          delete axios.defaults.headers.common["Authorization"];
+          localStorage.removeItem("jwt");
+          this.$router.push("/");
+        });
+      }
     },
   },
 };
