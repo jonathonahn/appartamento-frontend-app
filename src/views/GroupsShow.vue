@@ -11,8 +11,9 @@
     </div>
 
     <div v-for="listing in group.listings" v-bind:key="listing.name">
-      <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
-      <br />
+      <h3>
+        <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
+      </h3>
       <img
         class="listing-image"
         :src="`${listing.image}`"
@@ -34,6 +35,14 @@
 }
 .listing-image {
   height: 300px;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:visited {
+  text-decoration: none;
+  color: black;
 }
 </style>
 

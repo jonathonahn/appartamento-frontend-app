@@ -6,12 +6,12 @@
         <router-link to="/Signup">Signup</router-link>
       </span>
       <span v-if="isLoggedIn()">
+        <router-link v-if="isLoggedIn()" to="/GroupsShow">Group</router-link> |
         <router-link to="/UsersEdit">My Profile</router-link>
         |
         <router-link to="/Logout">Logout</router-link>
       </span>
     </div>
-    <router-link v-if="isLoggedIn()" to="/GroupsShow">Group</router-link>
     <router-view />
   </div>
 </template>
