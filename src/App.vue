@@ -1,9 +1,11 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/Login">Login</router-link> |
-      <router-link to="/Signup">Signup</router-link> |
-      <router-link to="/Logout">Logout</router-link>
+      <span v-if="!isLoggedIn()">
+        <router-link to="/Login">Login</router-link> |
+        <router-link to="/Signup">Signup</router-link>
+      </span>
+      <router-link v-if="isLoggedIn()" to="/Logout">Logout</router-link>
     </div>
     <router-view />
   </div>
@@ -31,3 +33,19 @@
   color: #42b983;
 }
 </style>
+
+<script>
+export default {
+  data: function () {
+    return {};
+  },
+  methods: {
+    isLoggedIn: function () {
+      if (localStorage.getItem("jwt")) {
+        return true;
+      }
+      return false;
+    },
+  },
+};
+</script>
