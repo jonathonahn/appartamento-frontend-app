@@ -1,10 +1,13 @@
 <template>
   <div class="groupsshow">
     <h1>{{ group.name }}</h1>
-    <div v-for="user in group.users" v-bind:key="user.name">
-      <p>{{ user }}</p>
-    </div>
     <img :src="`${group.image}`" alt="group image" />
+    <div v-for="user in group.users" v-bind:key="user.name">
+      <p>{{ user.name }}</p>
+      <p>{{ user.email }}</p>
+      <img :src="`${user.image}`" alt="user image" />
+    </div>
+
     <div v-for="listing in group.listings" v-bind:key="listing.name">
       <p>{{ listing }}</p>
     </div>
