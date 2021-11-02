@@ -9,7 +9,12 @@
     </div>
 
     <div v-for="listing in group.listings" v-bind:key="listing.name">
-      <p>{{ listing }}</p>
+      <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
+      <br />
+      <img :src="`${listing.image}`" :alt="`${listing.address}`" />
+      <div v-for="comment in listing.comments" v-bind:key="comment.id">
+        <p>{{ comment.user.name }}: {{ comment.text }}</p>
+      </div>
     </div>
   </div>
 </template>

@@ -5,6 +5,7 @@ import Signup from "../views/Signup.vue";
 import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import GroupsShow from "../views/GroupsShow.vue";
+import UsersEdit from "../views/UsersEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,11 @@ const routes = [
     path: "/groupsshow",
     name: "groupsshow",
     component: GroupsShow,
+  },
+  {
+    path: "/usersedit",
+    name: "usersedit",
+    component: UsersEdit,
   },
 ];
 

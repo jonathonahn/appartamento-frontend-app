@@ -5,7 +5,11 @@
         <router-link to="/Login">Login</router-link> |
         <router-link to="/Signup">Signup</router-link>
       </span>
-      <router-link v-if="isLoggedIn()" to="/Logout">Logout</router-link>
+      <span v-if="isLoggedIn()">
+        <router-link to="/UsersEdit">My Profile</router-link>
+        |
+        <router-link to="/Logout">Logout</router-link>
+      </span>
     </div>
     <router-link v-if="isLoggedIn()" to="/GroupsShow">Group</router-link>
     <router-view />
