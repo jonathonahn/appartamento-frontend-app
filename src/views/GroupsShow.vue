@@ -2,15 +2,19 @@
   <div class="groupsshow">
     <h1>{{ group.name }}</h1>
     <img :src="`${group.image}`" alt="group image" />
-    <div v-for="user in group.users" v-bind:key="user.name">
+    <ul>
+      <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+    </ul>
+    <div v-for="user in group.users" v-bind:key="user">
       <p>
         <img class="user-image-group" :src="`${user.image}`" alt="user image" />
         {{ user.name }}
       </p>
       <p>{{ user.email }}</p>
     </div>
-
-    <div v-for="listing in group.listings" v-bind:key="listing.name">
+    <input type="text" v-model="newListingParams.address" />
+    <button v-on:click="listingCreate()">Create Listing</button>
+    <div v-for="listing in group.listings" v-bind:key="listing">
       <h3>
         <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
       </h3>
@@ -20,10 +24,19 @@
         :alt="`${listing.address}`"
       />
       <br />
-      <div v-for="comment in listing.comments" v-bind:key="comment.id">
-        <p>{{ comment.user.name }}: {{ comment.text }}</p>
+      <div v-for="comment in listing.comments" v-bind:key="comment">
+        <span>{{ comment.user.name }}: {{ comment.text }} </span>
+        <button
+          v-on:click="commentDelete(comment.id)"
+          v-if="comment.user.id === currentUser.id"
+        >
+          delete
+        </button>
       </div>
+      <input v-model="newCommentParams.text" />
+      <button v-on:click="commentCreate(listing.id)">Add Comment</button>
       <button>More Info</button>
+      <button v-on:click="listingDelete(listing.id)">Delete</button>
     </div>
   </div>
 </template>
@@ -52,6 +65,11 @@ export default {
   data: function () {
     return {
       group: {},
+      errors: [],
+      currentUser: {},
+      newListingParams: {},
+      editListingParams: {},
+      newCommentParams: {},
     };
   },
   created: function () {
@@ -64,7 +82,74 @@ export default {
       .catch((error) => {
         this.errors = error.response.data.errors;
       });
+    axios
+      .get("/users/current")
+      .then((response) => {
+        console.log(response.data);
+        this.currentUser = response.data;
+      })
+      .catch((error) => {
+        this.errors = error.response.data.errors;
+      });
   },
-  methods: {},
+  methods: {
+    listingCreate: function () {
+      axios
+        .post("/listings", this.newListingParams)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    listingUpdate: function (listingId) {
+      axios
+        .patch(`/listings/${listingId}`, this.editListingParams)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    listingDelete: function (listingId) {
+      if (confirm("Delete listing?")) {
+        axios
+          .delete(`/listings/${listingId}`)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+    commentCreate: function (listingId) {
+      this.newCommentParams.listing_id = listingId;
+      this.newCommentParams.user_id = this.currentUser.id;
+      axios
+        .post("/comments", this.newCommentParams)
+        .then((response) => {
+          console.log(response.data);
+          this.newCommentParams.text = "";
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    commentDelete: function (commentId) {
+      if (confirm("Delete comment?")) {
+        axios
+          .delete(`/comments/${commentId}`)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+  },
 };
 </script>
