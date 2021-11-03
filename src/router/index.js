@@ -40,13 +40,13 @@ const routes = [
     component: Logout,
   },
   {
-    path: "/groupsshow",
-    name: "groupsshow",
+    path: "/groups/current",
+    name: "groups-show",
     component: GroupsShow,
   },
   {
-    path: "/usersedit",
-    name: "usersedit",
+    path: "/users/current/edit",
+    name: "users-edit",
     component: UsersEdit,
   },
 ];

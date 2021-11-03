@@ -1,11 +1,11 @@
 <template>
-  <div class="groupsshow">
+  <div class="groups-show">
     <h1>{{ group.name }}</h1>
     <img :src="`${group.image}`" alt="group image" />
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
     </ul>
-    <div v-for="user in group.users" v-bind:key="user">
+    <div v-for="user in group.users" v-bind:key="user.id">
       <p>
         <img class="user-image-group" :src="`${user.image}`" alt="user image" />
         {{ user.name }}
@@ -14,7 +14,7 @@
     </div>
     <input type="text" v-model="newListingParams.address" />
     <button v-on:click="listingCreate()">Create Listing</button>
-    <div v-for="listing in group.listings" v-bind:key="listing">
+    <div v-for="listing in group.listings" v-bind:key="listing.id">
       <h3>
         <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
       </h3>
@@ -24,19 +24,19 @@
         :alt="`${listing.address}`"
       />
       <br />
-      <div v-for="comment in listing.comments" v-bind:key="comment">
+      <div v-for="comment in listing.comments" v-bind:key="comment.id">
         <span>{{ comment.user.name }}: {{ comment.text }} </span>
         <button
-          v-on:click="commentDelete(comment.id)"
+          v-on:click="commentDelete(comment, listing)"
           v-if="comment.user.id === currentUser.id"
         >
           delete
         </button>
       </div>
       <input v-model="newCommentParams.text" />
-      <button v-on:click="commentCreate(listing.id)">Add Comment</button>
+      <button v-on:click="commentCreate(listing)">Add Comment</button>
       <button>More Info</button>
-      <button v-on:click="listingDelete(listing.id)">Delete</button>
+      <button v-on:click="listingDelete(listing)">Delete</button>
     </div>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
       group: {},
       errors: [],
       currentUser: {},
+      editGroupParams: {},
       newListingParams: {},
       editListingParams: {},
       newCommentParams: {},
@@ -93,30 +94,21 @@ export default {
       });
   },
   methods: {
-    listingCreate: function () {
+    groupUpdate: function () {
       axios
-        .post("/listings", this.newListingParams)
+        .patch("/groups/current", this.editGroupParams)
         .then((response) => {
           console.log(response.data);
+          this.group = response.data;
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
     },
-    listingUpdate: function (listingId) {
-      axios
-        .patch(`/listings/${listingId}`, this.editListingParams)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          this.errors = error.response.data.errors;
-        });
-    },
-    listingDelete: function (listingId) {
-      if (confirm("Delete listing?")) {
+    groupDelete: function () {
+      if (confirm("Delete group?")) {
         axios
-          .delete(`/listings/${listingId}`)
+          .delete("/groups/current")
           .then((response) => {
             console.log(response.data);
           })
@@ -125,25 +117,63 @@ export default {
           });
       }
     },
-    commentCreate: function (listingId) {
-      this.newCommentParams.listing_id = listingId;
-      this.newCommentParams.user_id = this.currentUser.id;
+    listingCreate: function () {
       axios
-        .post("/comments", this.newCommentParams)
+        .post("/listings", this.newListingParams)
         .then((response) => {
           console.log(response.data);
-          this.newCommentParams.text = "";
+          this.group.listings.push(response.data);
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
     },
-    commentDelete: function (commentId) {
+    listingUpdate: function (listing) {
+      axios
+        .patch(`/listings/${listing.id}`, this.editListingParams)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    listingDelete: function (listing) {
+      if (confirm("Delete listing?")) {
+        axios
+          .delete(`/listings/${listing.id}`)
+          .then((response) => {
+            console.log(response.data); // splice stuff
+            var index = this.listings.indexOf(listing);
+            this.listings.splice(index, 1);
+          })
+          .catch((error) => {
+            this.errors = error.response.data.errors;
+          });
+      }
+    },
+    commentCreate: function (listing) {
+      this.newCommentParams.listing_id = listing.id;
+      axios
+        .post("/comments", this.newCommentParams)
+        .then((response) => {
+          console.log(response.data);
+          this.newCommentParams.text = "";
+          listing.comments.push(response.data);
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
+    },
+    commentDelete: function (comment, listing) {
       if (confirm("Delete comment?")) {
         axios
-          .delete(`/comments/${commentId}`)
+          .delete(`/comments/${comment.id}`)
           .then((response) => {
-            console.log(response.data);
+            console.log(response.data); //splice comment out of listing
+            listing;
+            var index = this.listings.listing.comments.indexOf(comment);
+            this.listings.listing.comments.splice(index, 1);
           })
           .catch((error) => {
             this.errors = error.response.data.errors;

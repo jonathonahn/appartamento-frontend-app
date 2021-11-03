@@ -1,5 +1,5 @@
 <template>
-  <div class="usersedit">
+  <div class="users-edit">
     <div>
       <img :src="`${user.image}`" class="user-image-show" alt="user image" />
     </div>

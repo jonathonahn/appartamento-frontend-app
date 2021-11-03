@@ -7,7 +7,7 @@
       </ul>
       <div v-if="!newUserParams.group_id">
         <label>Group Name: </label>
-        <input type="text" v-model="newGroupParams.name" />
+        <input type="text" v-model="newUserParams.group_name" />
       </div>
       <div>
         <label>Name: </label>
@@ -32,50 +32,27 @@
 
 <script>
 import axios from "axios";
-
 export default {
   data: function () {
     return {
       newUserParams: {},
-      newGroupParams: {},
       errors: [],
     };
   },
   created: function () {
-    this.newUserParams["group_id"] = this.$route.query.group_id;
+    this.newUserParams.group_id = this.$route.query.group_id;
   },
   methods: {
     submit: function () {
-      if (this.newGroupParams.name) {
-        axios
-          .post("/groups/current", this.newGroupParams)
-          .then((response) => {
-            console.log(response.data);
-            this.newUserParams["group_id"] = response.data.id;
-            axios
-              .post("/users", this.newUserParams)
-              .then((response) => {
-                console.log(response.data);
-                this.$router.push("/login");
-              })
-              .catch((error) => {
-                this.errors = error.response.data.errors;
-              });
-          })
-          .catch((error) => {
-            this.errors = error.response.data.errors;
-          });
-      } else {
-        axios
-          .post("/users", this.newUserParams)
-          .then((response) => {
-            console.log(response.data);
-            this.$router.push("/login");
-          })
-          .catch((error) => {
-            this.errors = error.response.data.errors;
-          });
-      }
+      axios
+        .post("/users", this.newUserParams)
+        .then((response) => {
+          console.log(response.data);
+          this.$router.push("/login");
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        });
     },
   },
 };

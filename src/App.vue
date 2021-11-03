@@ -2,14 +2,17 @@
   <div id="app">
     <div id="nav">
       <span v-if="!isLoggedIn()">
-        <router-link to="/Login">Login</router-link> |
-        <router-link to="/Signup">Signup</router-link>
+        <router-link to="/login">Login</router-link> |
+        <router-link to="/signup">Signup</router-link>
       </span>
       <span v-if="isLoggedIn()">
-        <router-link v-if="isLoggedIn()" to="/GroupsShow">Group</router-link> |
-        <router-link to="/UsersEdit">My Profile</router-link>
+        <router-link v-if="isLoggedIn()" to="/groups/current"
+          >Group</router-link
+        >
         |
-        <router-link to="/Logout">Logout</router-link>
+        <router-link to="/users/current/edit">My Profile</router-link>
+        |
+        <router-link to="/logout">Logout</router-link>
       </span>
     </div>
     <router-view />
