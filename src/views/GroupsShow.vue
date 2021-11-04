@@ -38,6 +38,9 @@
       <button>More Info</button>
       <button v-on:click="listingDelete(listing)">Delete</button>
     </div>
+    <div>
+      <button v-on:click="groupDelete()">Delete Group?</button>
+    </div>
   </div>
 </template>
 
@@ -107,14 +110,21 @@ export default {
     },
     groupDelete: function () {
       if (confirm("Delete group?")) {
-        axios
-          .delete("/groups/current")
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((error) => {
-            this.errors = error.response.data.errors;
-          });
+        if (confirm("This will delete all data and all accounts.")) {
+          if (confirm("Are you sure?")) {
+            axios
+              .delete("/groups/current")
+              .then((response) => {
+                console.log(response.data);
+                delete axios.defaults.headers.common["Authorization"];
+                localStorage.removeItem("jwt");
+                this.$router.push("/");
+              })
+              .catch((error) => {
+                this.errors = error.response.data.errors;
+              });
+          }
+        }
       }
     },
     listingCreate: function () {
@@ -172,9 +182,8 @@ export default {
           .delete(`/comments/${comment.id}`)
           .then((response) => {
             console.log(response.data); //splice comment out of listing
-            listing;
-            var index = this.listings.listing.comments.indexOf(comment);
-            this.listings.listing.comments.splice(index, 1);
+            var index = listing.comments.indexOf(comment);
+            listing.comments.splice(index, 1);
           })
           .catch((error) => {
             this.errors = error.response.data.errors;

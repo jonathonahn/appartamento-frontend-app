@@ -70,12 +70,17 @@ export default {
     },
     deleteUser: function () {
       if (confirm("Are you sure you want to delete your account?")) {
-        axios.delete(`/users/current`).then((response) => {
-          console.log(response.data);
-          delete axios.defaults.headers.common["Authorization"];
-          localStorage.removeItem("jwt");
-          this.$router.push("/");
-        });
+        axios
+          .delete(`/users/current`)
+          .then((response) => {
+            console.log(response.data);
+            delete axios.defaults.headers.common["Authorization"];
+            localStorage.removeItem("jwt");
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            this.errors = error.response.data.errors;
+          });
       }
     },
   },
