@@ -41,8 +41,8 @@
         />
         <br />
         <div>
-          <span v-if="listing.bed">Beds: {{ listing.bed }}, </span>
-          <span v-if="listing.bath">Baths: {{ listing.bath }}, </span>
+          <span v-if="listing.beds">Beds: {{ listing.beds }}, </span>
+          <span v-if="listing.baths">Baths: {{ listing.baths }}, </span>
           <span v-if="listing.squarefeet"
             >Square Feet: {{ listing.squarefeet }}
           </span>
@@ -79,8 +79,8 @@
       </dialog>
       <dialog id="listing-edit">
         <form method="dialog">
-          <p>Beds: <input type="text" v-model="editListingParams.bed" /></p>
-          <p>Baths: <input type="text" v-model="editListingParams.bath" /></p>
+          <p>Beds: <input type="text" v-model="editListingParams.beds" /></p>
+          <p>Baths: <input type="text" v-model="editListingParams.baths" /></p>
           <p>
             Area: <input type="text" v-model="editListingParams.squarefeet" />
           </p>
@@ -214,8 +214,8 @@ export default {
           this.editListingParams.status = "";
           this.editListingParams.url = "";
           this.editListingParams.image = "";
-          this.editListingParams.bed = null;
-          this.editListingParams.bath = null;
+          this.editListingParams.beds = null;
+          this.editListingParams.baths = null;
           this.editListingParams.squarefeet = null;
           var index = this.group.listings.indexOf(listing);
           this.group.listings[index] = response.data;
