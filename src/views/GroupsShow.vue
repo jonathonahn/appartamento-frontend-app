@@ -123,6 +123,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.group.listings.push(response.data);
+          this.newListingParams.address = "";
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
@@ -144,8 +145,8 @@ export default {
           .delete(`/listings/${listing.id}`)
           .then((response) => {
             console.log(response.data); // splice stuff
-            var index = this.listings.indexOf(listing);
-            this.listings.splice(index, 1);
+            var index = this.group.listings.indexOf(listing);
+            this.group.listings.splice(index, 1);
           })
           .catch((error) => {
             this.errors = error.response.data.errors;
