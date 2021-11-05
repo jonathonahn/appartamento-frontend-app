@@ -1,6 +1,6 @@
 <template>
   <div class="groups-show">
-    <h1>{{ group.name }}</h1>
+    <h1 v-if="group.name">{{ group.name }}</h1>
     <img :src="`${group.image}`" alt="group image" />
     <div>
       <button v-on:click="showEditGroup()">Edit</button>
@@ -8,18 +8,12 @@
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
     </ul>
-    <div>
-      <div v-for="user in group.users" v-bind:key="user.id">
-        <p>
-          <img
-            class="user-image-group"
-            :src="`${user.image}`"
-            alt="user image"
-          />
-          {{ user.name }}
-        </p>
-        <p>{{ user.email }}</p>
-      </div>
+    <div v-for="user in group.users" v-bind:key="user.id">
+      <p v-if="user.name">
+        <img class="user-image-group" :src="`${user.image}`" alt="user image" />
+        {{ user.name }}
+      </p>
+      <p>{{ user.email }}</p>
     </div>
     <div>
       <button v-on:click="getReferralLink()">Referral Link</button>
@@ -79,16 +73,13 @@
       </dialog>
       <dialog id="listing-edit">
         <form method="dialog">
-          <p>Beds: <input type="text" v-model="editListingParams.beds" /></p>
-          <p>Baths: <input type="text" v-model="editListingParams.baths" /></p>
-          <p>
-            Area: <input type="text" v-model="editListingParams.squarefeet" />
-          </p>
-          <p>Image: <input type="text" v-model="editListingParams.image" /></p>
-          <p>URL: <input type="text" v-model="editListingParams.url" /></p>
-          <p>
-            Status: <input type="text" v-model="editListingParams.status" />
-          </p>
+          <p>Beds: <input v-model="currentListing.beds" /></p>
+          <p>Baths: <input v-model="currentListing.baths" /></p>
+          <p>Area: <input v-model="currentListing.squarefeet" /></p>
+          <p>Image: <input v-model="currentListing.image" /></p>
+          <p>URL: <input v-model="currentListing.url" /></p>
+          <p>Status: <input v-model="currentListing.status" /></p>
+          <p>{{ currentListing }}</p>
           <button v-on:click="listingUpdate(currentListing)">Update</button>
           <button>Close</button>
         </form>
@@ -129,7 +120,6 @@ export default {
       currentUser: {},
       editGroupParams: {},
       newListingParams: {},
-      editListingParams: {},
       newCommentParams: {},
     };
   },
@@ -206,19 +196,10 @@ export default {
         });
     },
     listingUpdate: function (listing) {
-      console.log(listing);
       axios
-        .patch(`/listings/${listing.id}`, this.editListingParams)
+        .patch(`/listings/${listing.id}`, listing)
         .then((response) => {
           console.log(response.data);
-          this.editListingParams.status = "";
-          this.editListingParams.url = "";
-          this.editListingParams.image = "";
-          this.editListingParams.beds = null;
-          this.editListingParams.baths = null;
-          this.editListingParams.squarefeet = null;
-          var index = this.group.listings.indexOf(listing);
-          this.group.listings[index] = response.data;
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
