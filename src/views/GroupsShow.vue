@@ -1,5 +1,10 @@
 <template>
   <div class="groups-show">
+    <datalist id="statuses">
+      <option v-for="status in statuses" v-bind:key="status">
+        {{ status }}
+      </option>
+    </datalist>
     <h1 v-if="group.name">{{ group.name }}</h1>
     <img :src="`${group.image}`" alt="group image" />
     <div>
@@ -20,8 +25,7 @@
     </div>
     <br />
     <div>
-      <input type="text" v-model="newListingParams.address" />
-      <button v-on:click="listingCreate()">Create Listing</button>
+      <button v-on:click="showListingCreate()">New Listing</button>
     </div>
     <div>
       <div v-for="listing in group.listings" v-bind:key="listing.id">
@@ -38,8 +42,9 @@
           <span v-if="listing.beds">Beds: {{ listing.beds }}, </span>
           <span v-if="listing.baths">Baths: {{ listing.baths }}, </span>
           <span v-if="listing.squarefeet"
-            >Square Feet: {{ listing.squarefeet }}
+            >Square Feet: {{ listing.squarefeet }},
           </span>
+          <span v-if="listing.rent">Rent: {{ listing.rent }} </span>
         </div>
         <p>{{ listing.status }}</p>
         <div>
@@ -73,15 +78,77 @@
       </dialog>
       <dialog id="listing-edit">
         <form method="dialog">
-          <p>Beds: <input v-model="currentListing.beds" /></p>
-          <p>Baths: <input v-model="currentListing.baths" /></p>
+          <p>
+            Beds:
+            <input
+              type="number"
+              min="1"
+              max="10"
+              v-model="currentListing.beds"
+            />
+          </p>
+          <p>
+            Baths:
+            <input
+              type="number"
+              min="1"
+              max="10"
+              v-model="currentListing.baths"
+            />
+          </p>
           <p>Area: <input v-model="currentListing.squarefeet" /></p>
+          <p>Rent: <input v-model="currentListing.rent" /></p>
           <p>Image: <input v-model="currentListing.image" /></p>
           <p>URL: <input v-model="currentListing.url" /></p>
-          <p>Status: <input v-model="currentListing.status" /></p>
+          <p>
+            Status:
+            <input
+              type="text"
+              v-model="currentListing.status"
+              list="statuses"
+            />
+          </p>
           <p>{{ currentListing }}</p>
           <button v-on:click="listingUpdate(currentListing)">Update</button>
           <button>Close</button>
+        </form>
+      </dialog>
+      <dialog id="listing-create">
+        <form method="dialog">
+          <p>Address: <input v-model="newListingParams.address" /></p>
+          <p>
+            Beds:
+            <input
+              type="number"
+              min="1"
+              max="10"
+              v-model="newListingParams.beds"
+            />
+          </p>
+          <p>
+            Baths:
+            <input
+              type="number"
+              min="1"
+              max="10"
+              v-model="newListingParams.baths"
+            />
+          </p>
+          <p>Area: <input v-model="newListingParams.squarefeet" /></p>
+          <p>Rent: <input v-model="newListingParams.rent" /></p>
+          <p>Image: <input v-model="newListingParams.image" /></p>
+          <p>URL: <input v-model="newListingParams.url" /></p>
+          <p>
+            Status:
+            <input
+              type="text"
+              v-model="currentListing.status"
+              list="statuses"
+            />
+          </p>
+          <p>{{ newListingParams }}</p>
+          <button v-on:click="listingCreate()">Update</button>
+          <button v-on:click="newListingParams = {}">Close</button>
         </form>
       </dialog>
     </div>
@@ -121,6 +188,16 @@ export default {
       editGroupParams: {},
       newListingParams: {},
       newCommentParams: {},
+      statuses: [
+        "Not Opened",
+        "Pending Walkthrough",
+        "Application Submitted",
+        "Screening In Progress",
+        "Screening Completed",
+        "Additional Information Requested",
+        "Confirmed",
+        "Denied",
+      ],
     };
   },
   created: function () {
@@ -189,7 +266,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.group.listings.push(response.data);
-          this.newListingParams.address = "";
+          this.newListingParams = {};
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
@@ -209,6 +286,9 @@ export default {
       console.log(listing);
       this.currentListing = listing;
       document.querySelector("#listing-edit").showModal();
+    },
+    showListingCreate: function () {
+      document.querySelector("#listing-create").showModal();
     },
     listingDelete: function (listing) {
       if (confirm("Delete listing?")) {
