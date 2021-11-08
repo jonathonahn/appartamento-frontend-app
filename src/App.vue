@@ -15,32 +15,55 @@
         <router-link to="/logout">Logout</router-link>
       </span>
     </div>
+    <nav class="navbar custom-menu navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="/index4.html"
+          ><img src="/images/logo.png" alt=""
+        /></a>
+
+        <button
+          class="navbar-toggler collapsed"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbar-toggle"
+          aria-controls="navbar-toggle"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="icon-bar top-bar"></span>
+          <span class="icon-bar middle-bar"></span>
+          <span class="icon-bar bottom-bar"></span>
+          <span class="sr-only">Toggle navigation</span></button
+        ><!-- / navbar-toggler -->
+
+        <div class="collapse navbar-collapse" id="navbar-toggle">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/index4.html">HOME</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about4.html">ABOUT</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/works.html">WORKS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link last-menu-item" href="/contact4.html"
+                >CONTACT</a
+              >
+            </li>
+          </ul>
+          <!-- / navbar-nav -->
+        </div>
+        <!-- / navbar-collapse -->
+      </div>
+      <!-- / container -->
+    </nav>
     <router-view />
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<style></style>
 
 <script>
 export default {
