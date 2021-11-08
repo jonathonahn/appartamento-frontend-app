@@ -31,9 +31,22 @@
           <div class="col">
             <div class="card text-center">
               <div class="card-header">
-                <a :href="`${listing.url}`" target="_blank">{{
-                  listing.address
-                }}</a>
+                <a :href="`${listing.url}`" target="_blank"
+                  >{{ listing.address }}
+                </a>
+                <span
+                  v-if="listing.status === `Confirmed`"
+                  class="badge badge-success"
+                  >{{ listing.status }}</span
+                >
+                <span
+                  v-else-if="listing.status === `Denied`"
+                  class="badge badge-danger"
+                  >Denied</span
+                >
+                <span v-else class="badge badge-default">{{
+                  listing.status
+                }}</span>
               </div>
               <!-- / card-header -->
               <div class="card-body">
@@ -96,8 +109,6 @@
                 </button>
               </div>
               <!-- / card-body -->
-              <div class="card-footer">{{ listing.status }}</div>
-              <!-- / card-footer -->
             </div>
             <!-- / card -->
           </div>
