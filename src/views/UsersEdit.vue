@@ -1,35 +1,43 @@
 <template>
   <div class="users-edit">
     <div>
-      <img :src="`${user.image}`" class="user-image-show" alt="user image" />
+      <img :src="`${user.image}`" class="user-image" alt="user image" />
     </div>
-    <p>{{ user.name }}</p>
+    <h1>{{ user.name }}</h1>
     <form v-on:submit.prevent="submit()">
-      <h1>Edit User</h1>
+      <h2>Edit User</h2>
       <ul>
         <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
       <div>
-        <label>Name: </label>
+        <label>Name:</label>
+        &nbsp;
         <input type="text" v-model="editUserParams.name" />
       </div>
       <div>
-        <label>Email: </label>
+        <label>Email:</label>
+        &nbsp;
         <input type="email" v-model="editUserParams.email" />
       </div>
       <div>
-        <label>Image: </label>
+        <label>Image:</label>
+        &nbsp;
         <input type="text" v-model="editUserParams.image" />
       </div>
-      <input type="submit" value="Submit" />
+      <input class="btn btn-sm btn-secondary" type="submit" value="Submit" />
     </form>
-    <button v-on:click="deleteUser()">Delete User</button>
+    <br />
+    <button class="btn btn-sm btn-danger" v-on:click="deleteUser()">
+      Delete User
+    </button>
   </div>
 </template>
 
 <style>
-.user-image-show {
-  height: 200px;
+.user-image {
+  max-height: 300px;
+  width: auto;
+  height: auto;
   border-radius: 50%;
 }
 </style>
@@ -62,7 +70,7 @@ export default {
         .patch("/users/current", this.editUserParams)
         .then((response) => {
           console.log(response.data);
-          this.$router.push("/groupsshow");
+          this.$router.push("/groups/current");
         })
         .catch((error) => {
           this.errors = error.response.data.errors;

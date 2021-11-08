@@ -7,25 +7,30 @@
       </ul>
       <div v-if="!newUserParams.group_id">
         <label>Group Name: </label>
+        &nbsp;
         <input type="text" v-model="newUserParams.group_name" />
       </div>
       <div>
         <label>Name: </label>
+        &nbsp;
         <input type="text" v-model="newUserParams.name" />
       </div>
       <div>
         <label>Email: </label>
+        &nbsp;
         <input type="email" v-model="newUserParams.email" />
       </div>
       <div>
         <label>Password: </label>
+        &nbsp;
         <input type="password" v-model="newUserParams.password" />
       </div>
       <div>
         <label>Password confirmation: </label>
+        &nbsp;
         <input type="password" v-model="newUserParams.password_confirmation" />
       </div>
-      <input type="submit" value="Submit" />
+      <input class="btn btn-secondary btn-sm" type="submit" value="Submit" />
     </form>
   </div>
 </template>

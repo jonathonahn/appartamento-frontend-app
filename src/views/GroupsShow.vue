@@ -5,8 +5,19 @@
         {{ status }}
       </option>
     </datalist>
-    <h1 v-if="group.name">{{ group.name }}</h1>
-    <img :src="`${group.image}`" alt="group image" />
+    <header
+      class="header-home2 parallax"
+      :style="{
+        backgroundImage: 'url(' + `${group.image}` + ')',
+      }"
+    >
+      <div class="container">
+        <div class="header-content text-center">
+          <h1 class="header-title bg-transparent">{{ group.name }}</h1>
+        </div>
+      </div>
+      <!-- / container -->
+    </header>
     <div>
       <button class="btn btn-primary" v-on:click="showEditGroup()">Edit</button>
     </div>
@@ -15,16 +26,11 @@
     </ul>
 
     <div>
-      <button class="btn btn-primary" v-on:click="getReferralLink()">
-        Referral Link
-      </button>
-    </div>
-    <br />
-    <div>
       <button class="btn btn-primary" v-on:click="showListingCreate()">
         New Listing
       </button>
     </div>
+    <br />
     <div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div v-for="listing in group.listings" v-bind:key="listing.id">
@@ -234,6 +240,12 @@
       </div>
       <!-- / container -->
     </section>
+    <div>
+      <button class="btn btn-primary" v-on:click="getReferralLink()">
+        Referral Link
+      </button>
+    </div>
+    <br />
     <div>
       <button class="btn btn-warning" v-on:click="groupDelete()">
         Delete Group?

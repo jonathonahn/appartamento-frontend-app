@@ -7,13 +7,15 @@
       </ul>
       <div>
         <label>Email:</label>
+        &nbsp;
         <input type="email" v-model="newSessionParams.email" />
       </div>
       <div>
         <label>Password:</label>
+        &nbsp;
         <input type="password" v-model="newSessionParams.password" />
       </div>
-      <input type="submit" value="Submit" />
+      <input class="btn btn-secondary btn-sm" type="submit" value="Submit" />
     </form>
   </div>
 </template>
