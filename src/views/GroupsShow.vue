@@ -8,72 +8,109 @@
     <h1 v-if="group.name">{{ group.name }}</h1>
     <img :src="`${group.image}`" alt="group image" />
     <div>
-      <button v-on:click="showEditGroup()">Edit</button>
+      <button class="btn btn-primary" v-on:click="showEditGroup()">Edit</button>
     </div>
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
     </ul>
-    <div v-for="user in group.users" v-bind:key="user.id">
-      <p v-if="user.name">
-        <img class="user-image-group" :src="`${user.image}`" alt="user image" />
-        {{ user.name }}
-      </p>
-      <p>{{ user.email }}</p>
-    </div>
+
     <div>
-      <button v-on:click="getReferralLink()">Referral Link</button>
+      <button class="btn btn-primary" v-on:click="getReferralLink()">
+        Referral Link
+      </button>
     </div>
     <br />
     <div>
-      <button v-on:click="showListingCreate()">New Listing</button>
+      <button class="btn btn-primary" v-on:click="showListingCreate()">
+        New Listing
+      </button>
     </div>
     <div>
-      <div v-for="listing in group.listings" v-bind:key="listing.id">
-        <h3>
-          <a :href="`${listing.url}`" target="_blank">{{ listing.address }}</a>
-        </h3>
-        <img
-          class="listing-image"
-          :src="`${listing.image}`"
-          :alt="`${listing.address}`"
-        />
-        <br />
-        <div>
-          <span v-if="listing.beds">Beds: {{ listing.beds }}, </span>
-          <span v-if="listing.baths">Baths: {{ listing.baths }}, </span>
-          <span v-if="listing.squarefeet"
-            >Square Feet: {{ listing.squarefeet }},
-          </span>
-          <span v-if="listing.rent">Rent: {{ listing.rent }} </span>
-        </div>
-        <p>{{ listing.status }}</p>
-        <div>
-          <div v-for="comment in listing.comments" v-bind:key="comment.id">
-            <span>{{ comment.user.name }}: {{ comment.text }} </span>
-            <button
-              v-on:click="commentDelete(comment, listing)"
-              v-if="comment.user.id === currentUser.id"
-            >
-              delete
-            </button>
-          </div>
-        </div>
-        <input v-model="newCommentParams.text" />
-        <button v-on:click="commentCreate(listing)">Add Comment</button>
-        <div>
-          <button v-on:click="showListing(listing)">Edit Listing</button>
-        </div>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div v-for="listing in group.listings" v-bind:key="listing.id">
+          <div class="col">
+            <div class="card text-center">
+              <div class="card-header">
+                <a :href="`${listing.url}`" target="_blank">{{
+                  listing.address
+                }}</a>
+              </div>
+              <!-- / card-header -->
+              <div class="card-body">
+                <h4 class="card-title">
+                  <a :href="`${listing.url}`" target="_blank">
+                    <img
+                      class="card-img-top"
+                      :src="`${listing.image}`"
+                      :alt="`${listing.address}`"
+                    />
+                  </a>
+                </h4>
+                <h6 class="card-text">
+                  <span v-if="listing.beds">Beds: {{ listing.beds }}, </span>
+                  <span v-if="listing.baths">Baths: {{ listing.baths }}, </span>
+                  <span v-if="listing.squarefeet"
+                    >Square Feet: {{ listing.squarefeet }},
+                  </span>
+                  <span v-if="listing.rent">Rent: {{ listing.rent }} </span>
+                </h6>
 
-        <div>
-          <button v-on:click="listingDelete(listing)">Delete Listing</button>
+                <div>
+                  <div
+                    v-for="comment in listing.comments"
+                    v-bind:key="comment.id"
+                  >
+                    <span>{{ comment.user.name }}: {{ comment.text }} </span>
+                    <button
+                      class="btn btn-secondary btn-sm"
+                      v-on:click="commentDelete(comment, listing)"
+                      v-if="comment.user.id === currentUser.id"
+                    >
+                      delete
+                    </button>
+                  </div>
+                </div>
+                <br />
+                <input v-model="newCommentParams.text" />
+                &nbsp;
+                <button
+                  class="btn btn-secondary btn-sm"
+                  v-on:click="commentCreate(listing)"
+                >
+                  Add Comment
+                </button>
+                <br />
+                <br />
+                <button
+                  class="btn btn-secondary"
+                  v-on:click="showListing(listing)"
+                >
+                  Edit Listing
+                </button>
+                &nbsp;
+                <button
+                  class="btn btn-secondary"
+                  v-on:click="listingDelete(listing)"
+                >
+                  Delete Listing
+                </button>
+              </div>
+              <!-- / card-body -->
+              <div class="card-footer">{{ listing.status }}</div>
+              <!-- / card-footer -->
+            </div>
+            <!-- / card -->
+          </div>
         </div>
       </div>
       <dialog id="group-edit">
         <form method="dialog">
           <p>Name: <input type="text" v-model="editGroupParams.name" /></p>
           <p>Image: <input type="text" v-model="editGroupParams.image" /></p>
-          <button v-on:click="groupUpdate()">Update</button>
-          <button>Close</button>
+          <button class="btn btn-secondary" v-on:click="groupUpdate()">
+            Update
+          </button>
+          <button class="btn btn-secondary">Close</button>
         </form>
       </dialog>
       <dialog id="listing-edit">
@@ -109,8 +146,13 @@
             />
           </p>
           <p>{{ currentListing }}</p>
-          <button v-on:click="listingUpdate(currentListing)">Update</button>
-          <button>Close</button>
+          <button
+            class="btn btn-secondary"
+            v-on:click="listingUpdate(currentListing)"
+          >
+            Update
+          </button>
+          <button class="btn btn-secondary">Close</button>
         </form>
       </dialog>
       <dialog id="listing-create">
@@ -147,25 +189,31 @@
             />
           </p>
           <p>{{ newListingParams }}</p>
-          <button v-on:click="listingCreate()">Update</button>
-          <button v-on:click="newListingParams = {}">Close</button>
+          <button class="btn btn-secondary" v-on:click="listingCreate()">
+            Update
+          </button>
+          <button class="btn btn-secondary" v-on:click="newListingParams = {}">
+            Close
+          </button>
         </form>
       </dialog>
     </div>
+    <div v-for="user in group.users" v-bind:key="user.id">
+      <p v-if="user.name">
+        <img class="user-image-group" :src="`${user.image}`" alt="user image" />
+        {{ user.name }}
+      </p>
+      <p>{{ user.email }}</p>
+    </div>
     <div>
-      <button v-on:click="groupDelete()">Delete Group?</button>
+      <button class="btn btn-warning" v-on:click="groupDelete()">
+        Delete Group?
+      </button>
     </div>
   </div>
 </template>
 
 <style>
-.user-image-group {
-  height: 50px;
-  border-radius: 50%;
-}
-.listing-image {
-  height: 300px;
-}
 a {
   text-decoration: none;
   color: black;
