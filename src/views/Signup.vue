@@ -34,7 +34,11 @@
     </form>
   </div>
 </template>
-
+<style>
+.signup {
+  text-align: center;
+}
+</style>
 <script>
 import axios from "axios";
 export default {

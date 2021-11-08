@@ -13,13 +13,17 @@
     >
       <div class="container">
         <div class="header-content text-center">
-          <h1 class="header-title bg-transparent">{{ group.name }}</h1>
+          <h1 class="header-title bg-transparent" style="color: white">
+            {{ group.name }}
+          </h1>
         </div>
       </div>
       <!-- / container -->
     </header>
     <div>
-      <button class="btn btn-primary" v-on:click="showEditGroup()">Edit</button>
+      <button class="btn btn-sm btn-primary" v-on:click="showEditGroup()">
+        Edit Group
+      </button>
     </div>
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
@@ -262,6 +266,9 @@ a {
 a:visited {
   text-decoration: none;
   color: black;
+}
+.groups-show {
+  text-align: center;
 }
 </style>
 

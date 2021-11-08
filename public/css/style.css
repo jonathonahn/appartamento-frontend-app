@@ -4914,7 +4914,8 @@ header.header-home {
 }
 
 header.header-home2 {
-  background-image: url("../images/header-home2.jpg");
+  background-image: url("../images/header-home2.jpg"),
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 }
 
 header.header-agency {

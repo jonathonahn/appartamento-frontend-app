@@ -5,7 +5,7 @@
     </div>
     <h1>{{ user.name }}</h1>
     <form v-on:submit.prevent="submit()">
-      <h2>Edit User</h2>
+      <h3>Edit Profile</h3>
       <ul>
         <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
       </ul>
@@ -39,6 +39,9 @@
   width: auto;
   height: auto;
   border-radius: 50%;
+}
+.users-edit {
+  text-align: center;
 }
 </style>
 

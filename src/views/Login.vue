@@ -19,7 +19,11 @@
     </form>
   </div>
 </template>
-
+<style>
+.login {
+  text-align: center;
+}
+</style>
 <script>
 import axios from "axios";
 
