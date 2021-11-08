@@ -2,9 +2,7 @@
   <div id="app">
     <nav class="navbar custom-menu navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="/"
-          ><img src="/images/logo.png" alt=""
-        /></a>
+        <a class="navbar-brand" href="/">Appartamento</a>
 
         <button
           class="navbar-toggler collapsed"

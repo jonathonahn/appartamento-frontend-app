@@ -209,13 +209,31 @@
         </form>
       </dialog>
     </div>
-    <div v-for="user in group.users" v-bind:key="user.id">
-      <p v-if="user.name">
-        <img class="user-image-group" :src="`${user.image}`" alt="user image" />
-        {{ user.name }}
-      </p>
-      <p>{{ user.email }}</p>
-    </div>
+    <section id="team" class="big-section">
+      <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          <div v-for="user in group.users" v-bind:key="user.id">
+            <div class="col">
+              <div class="team block image-block">
+                <div class="team-item">
+                  <img :src="`${user.image}`" alt="" class="team-image" />
+                </div>
+                <!-- / team-item -->
+                <div class="team-content">
+                  <h5 class="box-title mb-1">{{ user.name }}</h5>
+                  <p class="team-info mb-2 text-primary">{{ user.email }}</p>
+                </div>
+                <!-- / team-content -->
+              </div>
+              <!-- / image-block -->
+            </div>
+            <!-- / column -->
+          </div>
+        </div>
+        <!-- / row -->
+      </div>
+      <!-- / container -->
+    </section>
     <div>
       <button class="btn btn-warning" v-on:click="groupDelete()">
         Delete Group?
