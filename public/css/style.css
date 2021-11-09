@@ -4913,10 +4913,9 @@ header.header-home {
   background-image: url("../images/header-home.jpg");
 }
 
-header.header-home2 {
-  background-image: url("../images/header-home2.jpg"),
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-}
+/* header.header-home2 {
+  background-image: url("../images/header-home2.jpg");
+} */
 
 header.header-agency {
   padding-top: 160px;
@@ -5644,9 +5643,9 @@ header.video-wrapper #bgvideo {
   text-align: center;
 }
 
-.team-item:hover .team-image {
+/* .team-item:hover .team-image {
   opacity: 0.01;
-}
+} */
 
 .team-item:hover .middle {
   opacity: 1;

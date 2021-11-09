@@ -1,6 +1,16 @@
 <template>
   <div class="home">
-    <h1>{{ message }}</h1>
+    <header class="page-header">
+      <div class="container">
+        <div class="header-content text-center">
+          <div class="title-background">
+            <h1 class="header-title font-light">{{ message }}</h1>
+          </div>
+          <!-- / title-background -->
+        </div>
+      </div>
+      <!-- / container -->
+    </header>
   </div>
 </template>
 

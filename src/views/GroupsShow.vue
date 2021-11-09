@@ -31,10 +31,7 @@
         Edit Group
       </button>
     </div>
-    <ul>
-      <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-    </ul>
-
+    <br />
     <div>
       <button
         type="button"
@@ -45,6 +42,9 @@
         New Listing
       </button>
     </div>
+    <ul>
+      <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
+    </ul>
     <br />
     <div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -64,6 +64,18 @@
                   v-else-if="listing.status === `Denied`"
                   class="badge badge-danger"
                   >Denied</span
+                >
+                <span
+                  v-else-if="listing.status === `Not Opened`"
+                  class="badge badge-warning"
+                  >Not Opened</span
+                >
+                <span
+                  v-else-if="
+                    listing.status === `Additional Information Requested`
+                  "
+                  class="badge badge-info"
+                  >Additional Information Requested</span
                 >
                 <span v-else class="badge badge-default">{{
                   listing.status
@@ -116,13 +128,13 @@
                 <br />
                 <br />
                 <button
-                  v-on:click="currentListing = listing"
+                  v-on:click="listingShow(listing)"
                   type="button"
                   class="btn btn-secondary mr-1"
                   data-toggle="modal"
                   data-target=".listing-edit"
                 >
-                  Listing Edit
+                  Edit Listing
                 </button>
                 &nbsp;
                 <button
@@ -155,12 +167,13 @@
             </div>
             <!-- / modal-header -->
             <div class="modal-body">
-              <form method="dialog">
+              <form v-on:submit.prevent="submit()">
                 <p>
                   Name: <input type="text" v-model="editGroupParams.name" />
                 </p>
                 <p>
-                  Image: <input type="text" v-model="editGroupParams.image" />
+                  Image:
+                  <input type="text" v-model="editGroupParams.image" />
                 </p>
               </form>
             </div>
@@ -170,6 +183,7 @@
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
+                v-on:click="closeGroup()"
               >
                 Close
               </button>
@@ -207,8 +221,7 @@
             </div>
             <!-- / modal-header -->
             <div class="modal-body">
-              <p>{{ currentListing }}</p>
-              <form method="dialog">
+              <form v-on:submit.prevent="submit()">
                 <p>
                   Beds:
                   <input
@@ -239,7 +252,6 @@
                     list="statuses"
                   />
                 </p>
-                <p>{{ currentListing }}</p>
               </form>
             </div>
             <!-- / modal-body -->
@@ -248,6 +260,7 @@
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
+                v-on:click="closeListingShow()"
               >
                 Close
               </button>
@@ -285,7 +298,7 @@
             </div>
             <!-- / modal-header -->
             <div class="modal-body">
-              <form method="dialog">
+              <form v-on:submit.prevent="submit()">
                 <p>Address: <input v-model="newListingParams.address" /></p>
                 <p>
                   Beds:
@@ -313,11 +326,10 @@
                   Status:
                   <input
                     type="text"
-                    v-model="currentListing.status"
+                    v-model="newListingParams.status"
                     list="statuses"
                   />
                 </p>
-                <p>{{ newListingParams }}</p>
               </form>
             </div>
             <!-- / modal-body -->
@@ -326,6 +338,7 @@
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
+                v-on:click="closeListingNew()"
               >
                 Close
               </button>
@@ -354,7 +367,11 @@
             <div class="col">
               <div class="team block image-block">
                 <div class="team-item">
-                  <img :src="`${user.image}`" alt="" class="team-image" />
+                  <img
+                    :src="`${user.image}`"
+                    :alt="`${user.name}`"
+                    class="team-image"
+                  />
                 </div>
                 <!-- / team-item -->
                 <div class="team-content">
@@ -400,10 +417,9 @@ a:visited {
 }
 .team-image {
   display: block;
-  max-width: 230px;
-  max-height: 230px;
-  width: auto;
-  height: auto;
+  object-fit: cover;
+  max-height: 350px;
+  width: 100%;
 }
 </style>
 
@@ -415,6 +431,7 @@ export default {
       group: {},
       errors: [],
       currentListing: {},
+      oldListing: {},
       currentUser: {},
       editGroupParams: {},
       newListingParams: {},
@@ -452,23 +469,48 @@ export default {
       });
   },
   methods: {
+    setFile: function (event) {
+      if (event.target.files.length > 0) {
+        this.image_file = event.target.files[0];
+      }
+    },
+    submit: function () {
+      var formData = new FormData();
+      formData.append("name", this.editGroupParams.name);
+      formData.append("image_file", this.image_file);
+
+      axios.patch("/groups/current", formData).then((response) => {
+        console.log(response);
+        this.editGroupParams = {};
+        this.$refs.fileInput.value = "";
+      });
+    },
     getReferralLink: function () {
       alert(`http://localhost:8080/signup?group_id=${this.group.id}`);
     },
     groupUpdate: function () {
+      this.errors = [];
+      for (const attribute in this.editGroupParams) {
+        if (this.editGroupParams[attribute] === "") {
+          this.editGroupParams[attribute] = null;
+        }
+      }
       axios
         .patch("/groups/current", this.editGroupParams)
         .then((response) => {
           console.log(response.data);
-          this.editGroupParams.name = "";
-          this.editGroupParams.image = "";
+          this.editGroupParams = {};
           this.group = response.data;
         })
         .catch((error) => {
           this.errors = error.response.data.errors;
         });
     },
+    closeGroup: function () {
+      this.editGroupParams = {};
+    },
     groupDelete: function () {
+      this.errors = [];
       if (confirm("Delete group?")) {
         if (confirm("This will delete all data and all accounts.")) {
           if (confirm("Are you sure?")) {
@@ -488,6 +530,7 @@ export default {
       }
     },
     listingCreate: function () {
+      this.errors = [];
       axios
         .post("/listings", this.newListingParams)
         .then((response) => {
@@ -499,7 +542,22 @@ export default {
           this.errors = error.response.data.errors;
         });
     },
+    listingShow: function (listing) {
+      for (const attribute in listing) {
+        this.oldListing[attribute] = listing[attribute];
+      }
+      this.currentListing = listing;
+    },
+    closeListingShow: function () {
+      for (const attribute in this.oldListing) {
+        this.currentListing[attribute] = this.oldListing[attribute];
+      }
+    },
+    closeListingNew: function () {
+      this.newListingParams = {};
+    },
     listingUpdate: function (listing) {
+      this.errors = [];
       axios
         .patch(`/listings/${listing.id}`, listing)
         .then((response) => {
@@ -510,6 +568,7 @@ export default {
         });
     },
     listingDelete: function (listing) {
+      this.errors = [];
       if (confirm("Delete listing?")) {
         axios
           .delete(`/listings/${listing.id}`)
@@ -524,6 +583,7 @@ export default {
       }
     },
     commentCreate: function (listing) {
+      this.errors = [];
       this.newCommentParams.listing_id = listing.id;
       axios
         .post("/comments", this.newCommentParams)
@@ -537,6 +597,7 @@ export default {
         });
     },
     commentDelete: function (comment, listing) {
+      this.errors = [];
       if (confirm("Delete comment?")) {
         axios
           .delete(`/comments/${comment.id}`)
