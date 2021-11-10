@@ -258,6 +258,7 @@
                   >
                     Save
                   </button>
+                  <br />
                   <button class="btn btn-sm" v-on:click="closeComment()">
                     Cancel
                   </button>
@@ -313,6 +314,10 @@
             <!-- / modal-header -->
             <div class="modal-body">
               <form v-on:submit.prevent="submit()">
+                <p>
+                  Address:
+                  <input type="text" v-model="currentListing.address" />
+                </p>
                 <p>
                   Beds:
                   <input
