@@ -24,7 +24,7 @@
     <div>
       <button
         type="button"
-        class="btn btn-primary btn-sm mr-1"
+        class="btn btn-secondary btn-sm mr-1"
         data-toggle="modal"
         data-target=".group-edit"
       >
@@ -45,8 +45,7 @@
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
     </ul>
-    <br />
-    <div>
+    <div class="container inner-space -2x pt-0">
       <div class="row row-cols-1 row-cols-md-3 g-4">
         <div v-for="listing in group.listings" v-bind:key="listing.id">
           <div class="col">
@@ -117,13 +116,21 @@
                   </div>
                 </div>
                 <br />
-                <input v-model="newCommentParams.text" />
-                &nbsp;
+                <div v-if="activeCommentListingId === listing.id">
+                  <input v-model="newCommentParams.text" />
+                  &nbsp;
+                  <button
+                    class="btn btn-secondary btn-sm"
+                    v-on:click="commentCreate(listing)"
+                  >
+                    Add Comment
+                  </button>
+                </div>
                 <button
                   class="btn btn-secondary btn-sm"
-                  v-on:click="commentCreate(listing)"
+                  v-on:click="showComment(listing)"
                 >
-                  Add Comment
+                  New Comment
                 </button>
                 <br />
                 <br />
@@ -446,6 +453,7 @@ export default {
         "Confirmed",
         "Denied",
       ],
+      activeCommentListingId: 0,
     };
   },
   created: function () {
@@ -582,6 +590,9 @@ export default {
           });
       }
     },
+    showComment: function (listing) {
+      this.activeCommentListingId = listing.id;
+    },
     commentCreate: function (listing) {
       this.errors = [];
       this.newCommentParams.listing_id = listing.id;
@@ -590,6 +601,7 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.newCommentParams.text = "";
+          this.activeCommentListingId = 0;
           listing.comments.push(response.data);
         })
         .catch((error) => {

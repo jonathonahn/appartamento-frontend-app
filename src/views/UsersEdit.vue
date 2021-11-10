@@ -1,5 +1,6 @@
 <template>
   <div class="users-edit">
+    <br />
     <div>
       <img :src="`${user.image}`" class="user-image" alt="user image" />
     </div>
