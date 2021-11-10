@@ -241,7 +241,7 @@
                   >
                     <span>{{ comment.user.name }}: {{ comment.text }} </span>
                     <button
-                      class="btn btn-secondary btn-sm"
+                      class="btn btn-sm"
                       v-on:click="commentDelete(comment, listing)"
                       v-if="comment.user.id === currentUser.id"
                     >
@@ -249,24 +249,28 @@
                     </button>
                   </div>
                 </div>
-                <br />
                 <div v-if="activeCommentListingId === listing.id">
                   <input v-model="newCommentParams.text" />
                   &nbsp;
                   <button
-                    class="btn btn-secondary btn-sm"
+                    class="btn btn-sm"
                     v-on:click="commentCreate(listing)"
                   >
-                    Add Comment
+                    Save
+                  </button>
+                  <button class="btn btn-sm" v-on:click="closeComment()">
+                    Cancel
                   </button>
                 </div>
-                <button
-                  class="btn btn-secondary btn-sm"
-                  v-on:click="showComment(listing)"
-                >
-                  New Comment
-                </button>
-                <br />
+                <div>
+                  <button
+                    class="btn btn-sm"
+                    v-on:click="showComment(listing)"
+                    v-if="activeCommentListingId != listing.id"
+                  >
+                    New Comment
+                  </button>
+                </div>
                 <br />
                 <button
                   v-on:click="listingShow(listing)"
@@ -593,6 +597,10 @@ export default {
     },
     showComment: function (listing) {
       this.activeCommentListingId = listing.id;
+    },
+    closeComment: function () {
+      this.activeCommentListingId = 0;
+      this.newCommentParams.text = ``;
     },
     commentCreate: function (listing) {
       this.errors = [];
