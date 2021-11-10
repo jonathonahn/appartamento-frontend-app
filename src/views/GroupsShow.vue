@@ -224,7 +224,10 @@
                 </h4>
                 <h6 class="card-text">
                   <span v-if="listing.beds">Beds: {{ listing.beds }}, </span>
-                  <span v-if="listing.baths">Baths: {{ listing.baths }}, </span>
+                  <span v-if="listing.baths"
+                    >Baths: {{ listing.baths.toString().replace(/\.0$/, "") }}
+                  </span>
+                  <br />
                   <span v-if="listing.squarefeet"
                     >Square Feet: {{ listing.squarefeet }},
                   </span>
