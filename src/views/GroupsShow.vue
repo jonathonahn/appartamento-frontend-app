@@ -83,6 +83,7 @@
     </div>
     <!-- / modal -->
     <!-- / medium modal -->
+    <div id="map"></div>
     <br />
     <div>
       <button
@@ -433,9 +434,15 @@ a:visited {
   max-height: 350px;
   width: 100%;
 }
+#map {
+  height: 500px;
+  display: block;
+}
 </style>
 
 <script>
+/* global MapboxGeocoder */
+import mapboxgl from "mapbox-gl";
 import axios from "axios";
 export default {
   data: function () {
@@ -459,7 +466,26 @@ export default {
         "Denied",
       ],
       activeCommentListingId: 0,
+      places: [],
+      startingCity: "",
     };
+  },
+  mounted: function () {
+    // mapbox
+    mapboxgl.accessToken = process.env.VUE_APP_MAPBOX_ACCESS_TOKEN;
+    //makes a map
+    const map = new mapboxgl.Map({
+      container: "map", // container ID
+      style: "mapbox://styles/mapbox/streets-v11", // style URL
+      center: [-118.24, 34.05], // starting position [lng, lat]
+      zoom: 12, // starting zoom
+    });
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+      })
+    );
   },
   created: function () {
     axios
