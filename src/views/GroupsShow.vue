@@ -231,7 +231,7 @@
                   <span v-if="listing.squarefeet"
                     >Square Feet: {{ listing.squarefeet }},
                   </span>
-                  <span v-if="listing.rent">Rent: {{ listing.rent }} </span>
+                  <span v-if="listing.rent">Rent: ${{ listing.rent }} </span>
                 </h6>
 
                 <div>
