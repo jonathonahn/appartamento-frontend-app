@@ -31,6 +31,58 @@
         Edit Group
       </button>
     </div>
+    <!-- medium modal -->
+    <div class="modal fade group-edit" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Group</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <!-- / modal-header -->
+          <div class="modal-body">
+            <form v-on:submit.prevent="submit()">
+              <p>Name: <input type="text" v-model="editGroupParams.name" /></p>
+              <p>
+                Image:
+                <input type="text" v-model="editGroupParams.image" />
+              </p>
+            </form>
+          </div>
+          <!-- / modal-body -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              v-on:click="closeGroup()"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="groupUpdate()"
+              data-dismiss="modal"
+            >
+              Save changes
+            </button>
+          </div>
+          <!-- / modal-footer -->
+        </div>
+        <!-- / modal-content -->
+      </div>
+      <!-- modal-dialog -->
+    </div>
+    <!-- / modal -->
+    <!-- / medium modal -->
     <br />
     <div>
       <button
@@ -42,6 +94,85 @@
         New Listing
       </button>
     </div>
+    <!-- / medium modal -->
+    <!-- medium modal -->
+    <div class="modal fade listing-create" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Listing</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <!-- / modal-header -->
+          <div class="modal-body">
+            <form v-on:submit.prevent="submit()">
+              <p>Address: <input v-model="newListingParams.address" /></p>
+              <p>
+                Beds:
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  v-model="newListingParams.beds"
+                />
+              </p>
+              <p>
+                Baths:
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  v-model="newListingParams.baths"
+                />
+              </p>
+              <p>Area: <input v-model="newListingParams.squarefeet" /></p>
+              <p>Rent: <input v-model="newListingParams.rent" /></p>
+              <p>Image: <input v-model="newListingParams.image" /></p>
+              <p>URL: <input v-model="newListingParams.url" /></p>
+              <p>
+                Status:
+                <input
+                  type="text"
+                  v-model="newListingParams.status"
+                  list="statuses"
+                />
+              </p>
+            </form>
+          </div>
+          <!-- / modal-body -->
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              v-on:click="closeListingNew()"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-on:click="listingCreate()"
+              data-dismiss="modal"
+            >
+              Save changes
+            </button>
+          </div>
+          <!-- / modal-footer -->
+        </div>
+        <!-- / modal-content -->
+      </div>
+      <!-- modal-dialog -->
+    </div>
+    <!-- / modal -->
+    <!-- / medium modal -->
     <ul>
       <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
     </ul>
@@ -137,7 +268,7 @@
                 <button
                   v-on:click="listingShow(listing)"
                   type="button"
-                  class="btn btn-secondary mr-1"
+                  class="btn btn-secondary"
                   data-toggle="modal"
                   data-target=".listing-edit"
                 >
@@ -157,60 +288,6 @@
           </div>
         </div>
       </div>
-      <!-- medium modal -->
-      <div class="modal fade group-edit" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Edit Group</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <!-- / modal-header -->
-            <div class="modal-body">
-              <form v-on:submit.prevent="submit()">
-                <p>
-                  Name: <input type="text" v-model="editGroupParams.name" />
-                </p>
-                <p>
-                  Image:
-                  <input type="text" v-model="editGroupParams.image" />
-                </p>
-              </form>
-            </div>
-            <!-- / modal-body -->
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-                v-on:click="closeGroup()"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                v-on:click="groupUpdate()"
-                data-dismiss="modal"
-              >
-                Save changes
-              </button>
-            </div>
-            <!-- / modal-footer -->
-          </div>
-          <!-- / modal-content -->
-        </div>
-        <!-- modal-dialog -->
-      </div>
-      <!-- / modal -->
-      <!-- / medium modal -->
       <!-- medium modal -->
       <div class="modal fade listing-edit" tabindex="-1" role="dialog">
         <div class="modal-dialog">
@@ -287,85 +364,6 @@
         <!-- modal-dialog -->
       </div>
       <!-- / modal -->
-      <!-- / medium modal -->
-      <!-- medium modal -->
-      <div class="modal fade listing-create" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">New Listing</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <!-- / modal-header -->
-            <div class="modal-body">
-              <form v-on:submit.prevent="submit()">
-                <p>Address: <input v-model="newListingParams.address" /></p>
-                <p>
-                  Beds:
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    v-model="newListingParams.beds"
-                  />
-                </p>
-                <p>
-                  Baths:
-                  <input
-                    type="number"
-                    min="1"
-                    max="10"
-                    v-model="newListingParams.baths"
-                  />
-                </p>
-                <p>Area: <input v-model="newListingParams.squarefeet" /></p>
-                <p>Rent: <input v-model="newListingParams.rent" /></p>
-                <p>Image: <input v-model="newListingParams.image" /></p>
-                <p>URL: <input v-model="newListingParams.url" /></p>
-                <p>
-                  Status:
-                  <input
-                    type="text"
-                    v-model="newListingParams.status"
-                    list="statuses"
-                  />
-                </p>
-              </form>
-            </div>
-            <!-- / modal-body -->
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-                v-on:click="closeListingNew()"
-              >
-                Close
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                v-on:click="listingCreate()"
-                data-dismiss="modal"
-              >
-                Save changes
-              </button>
-            </div>
-            <!-- / modal-footer -->
-          </div>
-          <!-- / modal-content -->
-        </div>
-        <!-- modal-dialog -->
-      </div>
-      <!-- / modal -->
-      <!-- / medium modal -->
     </div>
     <section id="team" class="big-section">
       <div class="container">
